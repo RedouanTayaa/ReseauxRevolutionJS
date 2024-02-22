@@ -1,0 +1,73 @@
+version: '3'
+
+services:
+  backend:
+    image: rrjs-back
+    build:
+      context: ./back
+      dockerfile: ../docker/back/Dockerfile-backend
+    volumes:
+      - ./back:/usr/src/app
+#      - ./docker/back/init-script.sh:/usr/local/bin/init-script.sh
+    ports:
+      - "3000:3000"
+    command: npm run start:debug
+    depends_on:
+      - db
+    environment:
+      APP_ENV: ${APP_ENV}
+      APP_SECRET: ${APP_SECRET}
+      APP_DEBUG: ${APP_DEBUG}
+      POSTGRES_HOST: ${POSTGRES_HOST}
+      POSTGRES_PORT: ${POSTGRES_PORT}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+      CORS_ALLOW_ORIGIN: ${CORS_ALLOW_ORIGIN}
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY}
+      JWT_PUBLIC_KEY: ${JWT_PUBLIC_KEY}
+      JWT_PASSPHRASE: ${JWT_PASSPHRASE}
+      SECRET_KEY_TOKEN: ${SECRET_KEY_TOKEN}
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
+      OPENAI_API_URL: ${OPENAI_API_URL}
+      OPENAI_MODEL_NAME: ${OPENAI_MODEL_NAME}
+      MAILER_DSN: ${MAILER_DSN}
+      STRIPE_API_KEY: ${STRIPE_API_KEY}
+      STRIPE_SECRET: ${STRIPE_SECRET}
+      STRIPE_LINK_DASHBOARD: ${STRIPE_LINK_DASHBOARD}
+      BACK_URL: ${BACK_URL}
+      FRONT_URL: ${FRONT_URL}
+      APP_NAME: ${APP_NAME}
+
+  db:
+    image: postgres:13
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+
+  front:
+    image: rrjs-front
+    build:
+      context: ./front
+      dockerfile: ../docker/front/Dockerfile
+    volumes:
+      - ./front:/usr/src/app
+      - /usr/src/app/node_modules
+    ports:
+      - "4200:4200"
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
+    ports:
+      - "8081:80"
+
+  maildev:
+    image: maildev/maildev
+    container_name: maildev_pompost
+    command: bin/maildev --web 80 --smtp 25 --hide-extensions STARTTLS
+    ports:
+      - "8082:80"

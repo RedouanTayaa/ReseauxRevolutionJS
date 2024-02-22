@@ -1,0 +1,5 @@
+/stack.env
+/.env
+/.env.*
+.idea
+back-old/*
