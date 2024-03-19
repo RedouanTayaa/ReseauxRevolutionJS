@@ -34,12 +34,14 @@ export class PublicationEntity {
   @Column({
     type: 'date',
     nullable: true,
+    default: () => 'CURRENT_TIMESTAMP',
   })
   public createdAt: Date;
 
   @Column({
     type: 'date',
     nullable: true,
+    default: () => 'CURRENT_TIMESTAMP',
   })
   public updatedAt: Date;
 
