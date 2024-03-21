@@ -1,14 +1,13 @@
-import { UseCase } from '@/base/use-case';
+import { UseCasePromise } from '@/base/use-case';
 import { PostModel } from '../models/post.model';
 import { PostRepository } from '../repositories/post.repository';
-import { Observable } from 'rxjs';
 import { PostEntity } from '../entities/post-entity';
 
-export class PostGenerateUsecase implements UseCase<PostEntity, PostModel> {
+export class PostGenerateUsecase implements UseCasePromise<PostEntity, PostModel> {
   constructor(private postRepository: PostRepository) {
   }
 
-  execute(params: PostEntity): Observable<PostModel> {
+  execute(params: PostEntity): Promise<PostModel> {
     return this.postRepository.add(params);
   }
 }

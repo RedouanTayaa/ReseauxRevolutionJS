@@ -7,5 +7,5 @@ export interface PostEntity {
   mode?: string;
   openAiResponse?: string;
   targetAudience?: string;
-  createdAt: string;
+  createdAt?: string;
 }

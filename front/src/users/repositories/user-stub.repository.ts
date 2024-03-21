@@ -8,7 +8,7 @@ import { StripeModel } from '../models/stripe.model';
 export class UserStubRepository implements UserRepository {
   login(params: {email: string, password: string}): Observable<LoginModel> {
     return new Observable(subscriber => {
-      subscriber.next({token: '12345'});
+      subscriber.next({accessToken: '12345'});
     });
   }
 

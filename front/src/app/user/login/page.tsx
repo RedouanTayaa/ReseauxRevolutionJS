@@ -35,7 +35,7 @@ export default function Page() {
       .execute({email: formData.get('email') as string, password: formData.get('password') as string})
       .subscribe({
         next: (user) => {
-          authService.setToken(user.token);
+          authService.setToken(user.accessToken);
           togleSubmitted();
           router.push('/dashboard');
           router.refresh();

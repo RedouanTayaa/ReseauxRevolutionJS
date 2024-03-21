@@ -1,4 +1,13 @@
-export const PostModeType = {
+interface PostModeOptions {
+  option: string;
+  value: string;
+}
+
+interface PostModeType {
+  [key: string]: PostModeOptions[];
+}
+
+export const PostModeType: PostModeType = {
   Facebook: [
     {
       option: 'Actualités Clés',

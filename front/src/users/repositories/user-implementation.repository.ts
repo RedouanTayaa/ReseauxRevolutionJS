@@ -23,7 +23,7 @@ export class UserImplementationRepository implements UserRepository {
 
   login(params: LoginCommand): Observable<LoginModel> {
     return from(this.axiosInterceptor.axios.post<ApiResponse<LoginModel>>(environment.apiUrl + '/login_check', {...params}).then(({data: response}) => {
-      if (response.data === undefined || response.data.token === undefined) {
+      if (response.data === undefined || response.data.accessToken === undefined) {
         throw new Error('Données non disponibles');
       }
       return response.data;

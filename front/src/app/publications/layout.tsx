@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import HeaderNavbar from '@/components/header/header-navbar';
 
-export default function DashboardLayout({
+export default function PublicationsLayout({
                                      children,
                                    }: Readonly<{
   children: React.ReactNode;

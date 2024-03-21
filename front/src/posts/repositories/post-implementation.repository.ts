@@ -8,13 +8,17 @@ import { environment } from '@/environment/environment';
 import { PostEntity } from '../entities/post-entity';
 import { PostService } from '../services/post.service';
 import axios from 'axios';
+import { AxiosInterceptor } from '@/core/services/axios.interceptor';
 
 export class PostImplementationRepository implements PostRepository {
   postMapper = new PostMapper();
+  axiosInterceptor: AxiosInterceptor;
 
-  constructor(private postService: PostService) {}
-  add(params: PostEntity): Observable<PostModel> {
-    return from(this.axiosInterceptor.axios.post<ApiResponse<PostEntity>>(environment.apiUrl + '/publications', {...params}).then(({data: response}) => {
+  constructor(private postService: PostService) {
+    this.axiosInterceptor = AxiosInterceptor.getInstance(axios);
+  }
+  add(params: PostEntity): Promise<PostModel> {
+    return this.axiosInterceptor.axios.post(environment.apiUrl + '/publications', {...params}).then(({data: response} : {data: ApiResponse<PostEntity>}) => {
       if (response.data === undefined) {
         throw new Error('Données non disponibles');
       }
@@ -24,7 +28,7 @@ export class PostImplementationRepository implements PostRepository {
       return postAddModel;
     }).catch((err) => {
       throw new Error(err.error?.message);
-    }));
+    });
   }
 
   edit(id: number, params: {}): Observable<PostModel> {
@@ -41,8 +45,8 @@ export class PostImplementationRepository implements PostRepository {
     }));
   }
 
-  list(params: {}): Observable<PostModel[]> {
-    return from(this.axiosInterceptor.axios.get<ApiResponse<PostEntity[]>>(environment.apiUrl + '/publications').then(({data: response}) => {
+  list(params: {}): Promise<PostModel[]> {
+    return this.axiosInterceptor.axios.get<ApiResponse<PostEntity[]>>(environment.apiUrl + '/publications').then(({data: response}) => {
       if (response.data === undefined) {
         throw new Error('Données non disponibles');
       }
@@ -52,7 +56,7 @@ export class PostImplementationRepository implements PostRepository {
       return postsLit;
     }).catch((err) => {
       throw new Error(err.error?.message);
-    }));
+    });
   }
 
   remove(id: number): Observable<boolean> {
